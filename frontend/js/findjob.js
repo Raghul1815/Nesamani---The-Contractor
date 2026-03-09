@@ -141,9 +141,9 @@
   let activeWorker  = null;
   let filteredData  = [...WORKERS];
 
-  /* ════════════════════════════════════════
-     INIT
-  ════════════════════════════════════════ */
+  
+    //  INIT
+
   window.addEventListener('DOMContentLoaded', () => {
     // Pre-fill from landing page search
     const savedJob  = sessionStorage.getItem('requestedJob');
