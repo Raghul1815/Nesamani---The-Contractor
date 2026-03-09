@@ -1,6 +1,6 @@
-/* ════════════════════════════════════════
-     WORKER DATA
-  ════════════════════════════════════════ */
+
+    //  WORKER DATA
+
   const WORKERS = [
     {
       id: 1, name: "Murugan Selvam", role: "Senior Plumber", icon: "🔧",
