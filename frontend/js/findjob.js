@@ -135,9 +135,7 @@
     }
   ];
 
-  /* ════════════════════════════════════════
-     STATE
-  ════════════════════════════════════════ */
+    //  STATE
   let currentSort   = 'rating';
   let currentView   = 'grid';
   let activeWorker  = null;
