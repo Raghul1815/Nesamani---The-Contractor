@@ -168,16 +168,16 @@
     el.style.background = `linear-gradient(to right, var(--gold) 0%, var(--gold) ${pct}%, #e8dcc8 ${pct}%, #e8dcc8 100%)`;
   }
 
-  /* ════════════════════════════════════════
+  /*
      SEARCH (hero bar)
-  ════════════════════════════════════════ */
+ */
   function applySearch() {
     applyFilters();
   }
 
-  /* ════════════════════════════════════════
+  /* 
      FILTERS
-  ════════════════════════════════════════ */
+  */
   function applyFilters() {
     const searchCat  = document.getElementById('searchCategory').value.toLowerCase();
     const searchLoc  = document.getElementById('searchLocation').value.trim().toLowerCase();
