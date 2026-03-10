@@ -203,9 +203,9 @@
     updateResultMeta(searchCat, searchLoc, catChecked, availChecked, minRating, minExp);
   }
 
-  /* ════════════════════════════════════════
+  /* 
      SORT
-  ════════════════════════════════════════ */
+  */
   function sortData() {
     filteredData.sort((a, b) => {
       if (currentSort === 'rating')     return b.rating - a.rating;
