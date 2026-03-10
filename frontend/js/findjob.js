@@ -160,9 +160,9 @@
     renderCards();
   });
 
-  /* ════════════════════════════════════════
+  /*
      RANGE SLIDER STYLE
-  ════════════════════════════════════════ */
+  */
   function updateRangeStyle(el) {
     const pct = (el.value - el.min) / (el.max - el.min) * 100;
     el.style.background = `linear-gradient(to right, var(--gold) 0%, var(--gold) ${pct}%, #e8dcc8 ${pct}%, #e8dcc8 100%)`;
