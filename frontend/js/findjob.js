@@ -236,9 +236,9 @@
     renderCards();
   }
 
-  /* ════════════════════════════════════════
+  /*
      RENDER CARDS
-  ════════════════════════════════════════ */
+  */
   function renderCards() {
     const grid = document.getElementById('workersGrid');
 
