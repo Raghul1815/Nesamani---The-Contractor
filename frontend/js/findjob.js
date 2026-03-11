@@ -424,9 +424,9 @@
     applyFilters();
   }
 
-  /* ════════════════════════════════════════
+  /* 
      MODAL
-  ════════════════════════════════════════ */
+*/
   function openModal(id) {
     const w = WORKERS.find(x => x.id === id);
     if (!w) return;
