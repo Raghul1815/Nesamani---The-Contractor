@@ -407,9 +407,9 @@
     });
   });
 
-  /* ════════════════════════════════════════
+  /* 
      CLEAR FILTERS
-  ════════════════════════════════════════ */
+  */
   function clearAllFilters() {
     document.getElementById('searchCategory').value = '';
     document.getElementById('searchLocation').value = '';
