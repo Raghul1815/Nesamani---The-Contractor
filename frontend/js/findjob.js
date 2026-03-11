@@ -497,9 +497,9 @@
     if (e.key === 'Escape') closeModalDirect();
   });
 
-  /* ════════════════════════════════════════
+  /* 
      HIRE
-  ════════════════════════════════════════ */
+   */
   function hireDirect(id) {
     const w = WORKERS.find(x => x.id === id);
     showToast(`Redirecting to hire ${w.name}…`);
