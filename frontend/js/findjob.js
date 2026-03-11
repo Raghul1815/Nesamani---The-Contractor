@@ -1,5 +1,4 @@
-
-    //  WORKER DATA
+//  WORKER DATA
 
   const WORKERS = [
     {
@@ -513,9 +512,9 @@
     setTimeout(() => window.location.href = 'login.html', 1200);
   }
 
-  /* ════════════════════════════════════════
+  /*
      TOAST
-  ════════════════════════════════════════ */
+  */
   function showToast(msg) {
     const t = document.getElementById('toast');
     document.getElementById('toastMsg').textContent = msg;
