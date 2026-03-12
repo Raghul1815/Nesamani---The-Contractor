@@ -45,7 +45,7 @@ body {
   align-items: stretch;
 }
 
-/* ── Background Geometry ────────────────── */
+/* ── Background Geometry */
 .bg-grid {
   position: fixed; inset: 0;
   background-image:
