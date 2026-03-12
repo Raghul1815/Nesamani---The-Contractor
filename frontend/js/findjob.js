@@ -223,9 +223,9 @@
     renderCards();
   }
 
-  /* ════════════════════════════════════════
+  /*
      VIEW TOGGLE
-  ════════════════════════════════════════ */
+  */
   function setView(view) {
     currentView = view;
     const grid = document.getElementById('workersGrid');
