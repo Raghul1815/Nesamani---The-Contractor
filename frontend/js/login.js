@@ -1,4 +1,4 @@
-// ── Nesamani Login
+// Nesamani Login
 
 // Password toggle
 const togglePw = document.getElementById('togglePw');
