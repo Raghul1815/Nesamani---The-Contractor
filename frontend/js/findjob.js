@@ -353,9 +353,9 @@
     }).join('');
   }
 
-  /* ════════════════════════════════════════
+  /* 
      RESULT META & TAGS
-  ════════════════════════════════════════ */
+ */
   function updateResultMeta(searchCat, searchLoc, catChecked, availChecked, minRating, minExp) {
     document.getElementById('resultCount').innerHTML =
       `Showing <strong>${filteredData.length}</strong> worker${filteredData.length !== 1 ? 's' : ''}`;
