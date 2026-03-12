@@ -1,11 +1,11 @@
-/* 
+/* ,,h
    NESAMANI — Design System
    Aesthetic: Warm Artisan / Earth Premium
   */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
-/* ── Tokens ─────────────────────────────── */
+/* ── Tokens  */
 :root {
   --soil:      #1a1208;
   --bark:      #2d1f0e;
