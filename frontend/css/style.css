@@ -78,7 +78,7 @@ body {
   50%      { transform: translate(30px,20px) scale(1.06); }
 }
 
-/* ── Page Layout ────────────────────────── */
+/* ── Page Layout  */
 .page-wrap {
   display: flex;
   width: 100%;
