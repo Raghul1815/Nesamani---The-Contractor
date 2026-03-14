@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — Nesamani</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+  /* ══════════════════════════════════════
+     NESAMANI — Dashboard
+     Warm Artisan Design System
+  ══════════════════════════════════════ */
+  :root {
+    --soil:    #1a1208;
+    --bark:    #2d1f0e;
+    --earth:   #5c3d1e;
+    --clay:    #9b6b3a;
+    --sand:    #d4a96a;
+    --cream:   #f5eed8;
+    --ivory:   #faf7ef;
+    --gold:    #c9943a;
+    --gold-lt: #e8c47a;
+    --sage:    #6b8f6e;
+    --muted:   #8a7a63;
+    --error:   #c0392b;
+    --warning: #d68910;
+    --radius:  12px;
+    --radius-lg: 18px;
+    --shadow:  0 4px 20px rgba(26,18,8,.08);
+    --shadow-md: 0 8px 32px rgba(26,18,8,.12);
+    --trans:   .22s cubic-bezier(.4,0,.2,1);
+    --sidebar: 256px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 15px; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ivory);
+    color: var(--soil);
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  /* ══════════════════════════════════════
+     SIDEBAR
+  ══════════════════════════════════════ */
+  .sidebar {
+    width: var(--sidebar);
+    min-height: 100vh;
+    background: var(--bark);
+    background-image:
+      radial-gradient(ellipse at 10% 10%, rgba(201,148,58,.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 90%, rgba(26,18,8,.5) 0%, transparent 60%);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    transition: transform var(--trans);
+  }
+  .sidebar-logo {
+    padding: 24px 22px 20px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(201,148,58,.12);
+    text-decoration: none;
+  }
+  .logo-mark {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--gold), var(--sand));
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 3px 10px rgba(201,148,58,.35); flex-shrink: 0;
+  }
+  .logo-mark span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px; font-weight: 700; color: var(--bark); line-height: 1;
+  }
+  .logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 600; color: var(--cream); letter-spacing: -.3px;
+  }
+
+  /* User profile strip */
+  .sidebar-user {
+    padding: 16px 22px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(201,148,58,.1);
+    cursor: pointer;
+    transition: background var(--trans);
+  }
+  .sidebar-user:hover { background: rgba(255,255,255,.05); }
+  .user-avatar {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--clay), var(--sand));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+    border: 2px solid rgba(201,148,58,.25);
+  }
+  .user-info { min-width: 0; }
+  .user-name { font-size: 13px; font-weight: 500; color: var(--cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-role-badge {
+    font-size: 10px; font-weight: 500; color: var(--sand); letter-spacing: .3px;
+    text-transform: uppercase;
+  }
+  .user-chevron { margin-left: auto; color: var(--sand); opacity: .6; }
+  .user-chevron svg { width: 14px; height: 14px; }
+
+  /* Nav items */
+  .sidebar-nav { flex: 1; padding: 14px 12px; overflow-y: auto; }
+  .nav-section-label {
+    font-size: 10px; font-weight: 500; letter-spacing: 1.2px;
+    text-transform: uppercase; color: rgba(212,169,106,.45);
+    padding: 0 10px; margin: 16px 0 6px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 11px;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: rgba(245,238,216,.6);
+    font-size: 13.5px; font-weight: 400;
+    transition: color var(--trans), background var(--trans);
+    cursor: pointer; border: none; background: none; width: 100%; text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    position: relative;
+  }
+  .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; }
+  .nav-item:hover { color: var(--cream); background: rgba(255,255,255,.07); }
+  .nav-item.active {
+    color: var(--sand);
+    background: rgba(201,148,58,.15);
+    font-weight: 500;
+  }
+  .nav-item.active::before {
+    content: '';
+    position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 3px; border-radius: 0 3px 3px 0;
+    background: var(--gold);
+  }
+  .nav-badge {
+    margin-left: auto;
+    background: var(--gold);
+    color: var(--bark);
+    font-size: 10px; font-weight: 600;
+    padding: 1px 6px; border-radius: 99px;
+    min-width: 18px; text-align: center;
+  }
+
+  /* Sidebar footer */
+  .sidebar-footer {
+    padding: 14px 12px;
+    border-top: 1px solid rgba(201,148,58,.1);
+  }
+  .logout-btn {
+    display: flex; align-items: center; gap: 11px;
+    padding: 10px 12px; border-radius: var(--radius);
+    color: rgba(192,57,43,.7); font-size: 13.5px;
+    cursor: pointer; border: none; background: none; width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    transition: color var(--trans), background var(--trans);
+  }
+  .logout-btn svg { width: 17px; height: 17px; }
+  .logout-btn:hover { color: #c0392b; background: rgba(192,57,43,.08); }
+
+  /* ══════════════════════════════════════
+     MAIN CONTENT
+  ══════════════════════════════════════ */
+  .main {
+    margin-left: var(--sidebar);
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* BG grid */
+  .main::before {
+    content: '';
+    position: fixed; inset: 0; left: var(--sidebar);
+    background-image:
+      linear-gradient(rgba(201,148,58,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,148,58,.04) 1px, transparent 1px);
+    background-size: 52px 52px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* Top bar */
+  .topbar {
+    height: 64px;
+    background: rgba(250,247,239,.88);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(201,148,58,.1);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 16px; }
+  .hamburger {
+    display: none; background: none; border: none;
+    cursor: pointer; color: var(--earth); padding: 4px;
+  }
+  .hamburger svg { width: 22px; height: 22px; }
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 600; color: var(--soil); letter-spacing: -.3px;
+  }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .topbar-btn {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: white; border: 1.5px solid #e8dcc8;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--muted);
+    transition: all var(--trans); position: relative;
+  }
+  .topbar-btn:hover { border-color: var(--gold); color: var(--earth); }
+  .topbar-btn svg { width: 17px; height: 17px; }
+  .notif-dot {
+    position: absolute; top: 7px; right: 7px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold); border: 1.5px solid white;
+  }
+  /* Role toggle */
+  .role-switch {
+    display: flex; gap: 4px;
+    background: var(--cream); border-radius: 8px; padding: 3px;
+  }
+  .role-sw-btn {
+    padding: 5px 14px; font-size: 12px; font-weight: 500;
+    border: none; border-radius: 6px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; color: var(--muted);
+    background: transparent; transition: all var(--trans);
+  }
+  .role-sw-btn.active { background: white; color: var(--earth); box-shadow: 0 1px 6px rgba(26,18,8,.08); }
+
+  /* ══════════════════════════════════════
+     PAGE SECTIONS (tabs)
+  ══════════════════════════════════════ */
+  .page-section { display: none; padding: 28px 32px 48px; position: relative; z-index: 1; }
+  .page-section.active { display: block; animation: fadeUp .4s ease both; }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ══════════════════════════════════════
+     OVERVIEW — STAT CARDS
+  ══════════════════════════════════════ */
+  .section-greeting {
+    margin-bottom: 28px;
+  }
+  .greeting-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 600; color: var(--soil); letter-spacing: -.3px;
+  }
+  .greeting-sub { font-size: 14px; font-weight: 300; color: var(--muted); margin-top: 4px; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px; margin-bottom: 28px;
+  }
+  .stat-card {
+    background: white; border-radius: var(--radius-lg);
+    padding: 22px 22px 18px;
+    border: 1.5px solid rgba(201,148,58,.08);
+    box-shadow: var(--shadow);
+    position: relative; overflow: hidden;
+    transition: transform var(--trans), box-shadow var(--trans);
+  }
+  .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .stat-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--earth), var(--gold));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform var(--trans);
+  }
+  .stat-card:hover::after { transform: scaleX(1); }
+  .stat-card-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px; font-size: 18px;
+  }
+  .stat-card-icon.gold { background: rgba(201,148,58,.12); }
+  .stat-card-icon.sage { background: rgba(107,143,110,.12); }
+  .stat-card-icon.earth { background: rgba(92,61,30,.1); }
+  .stat-card-icon.clay  { background: rgba(155,107,58,.1); }
+  .stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 700; color: var(--soil); line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-key { font-size: 12px; color: var(--muted); font-weight: 400; }
+  .stat-delta {
+    margin-top: 8px; font-size: 11.5px; font-weight: 500;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .stat-delta.up { color: var(--sage); }
+  .stat-delta.down { color: var(--error); }
+  .stat-delta svg { width: 12px; height: 12px; }
+
+  /* ══════════════════════════════════════
+     TWO-COL LAYOUT
+  ══════════════════════════════════════ */
+  .two-col { display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
+  .full-col { grid-column: 1 / -1; }
+
+  /* ══════════════════════════════════════
+     CARDS / PANELS
+  ══════════════════════════════════════ */
+  .panel {
+    background: white; border-radius: var(--radius-lg);
+    border: 1.5px solid rgba(201,148,58,.08);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .panel-head {
+    padding: 18px 22px 16px;
+    border-bottom: 1px solid rgba(201,148,58,.08);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .panel-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px; font-weight: 600; color: var(--soil);
+  }
+  .panel-link {
+    font-size: 12px; color: var(--gold); text-decoration: none; font-weight: 500;
+    transition: color var(--trans);
+  }
+  .panel-link:hover { color: var(--earth); }
+  .panel-body { padding: 0; }
+
+  /* ══════════════════════════════════════
+     JOB ROWS
+  ══════════════════════════════════════ */
+  .job-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 22px;
+    border-bottom: 1px solid rgba(201,148,58,.06);
+    transition: background var(--trans); cursor: pointer;
+  }
+  .job-row:last-child { border-bottom: none; }
+  .job-row:hover { background: rgba(201,148,58,.03); }
+  .job-icon {
+    width: 42px; height: 42px; border-radius: 11px;
+    background: var(--ivory);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+    border: 1px solid rgba(201,148,58,.12);
+  }
+  .job-details { flex: 1; min-width: 0; }
+  .job-title { font-size: 14px; font-weight: 500; color: var(--soil); margin-bottom: 2px; }
+  .job-meta { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .job-meta span { display: flex; align-items: center; gap: 3px; }
+  .job-meta svg { width: 11px; height: 11px; }
+  .job-status {
+    padding: 4px 10px; border-radius: 99px;
+    font-size: 11px; font-weight: 500; flex-shrink: 0;
+  }
+  .job-status.completed { background: rgba(107,143,110,.1); color: var(--sage); }
+  .job-status.active    { background: rgba(201,148,58,.12); color: var(--clay); }
+  .job-status.pending   { background: rgba(155,107,58,.1);  color: var(--clay); }
+  .job-status.cancelled { background: rgba(192,57,43,.08);  color: var(--error); }
+  .job-date { font-size: 11.5px; color: var(--muted); flex-shrink: 0; }
+
+  /* ══════════════════════════════════════
+     NOTIFICATIONS
+  ══════════════════════════════════════ */
+  .notif-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 22px;
+    border-bottom: 1px solid rgba(201,148,58,.06);
+    transition: background var(--trans);
+  }
+  .notif-row:last-child { border-bottom: none; }
+  .notif-row:hover { background: rgba(201,148,58,.03); }
+  .notif-row.unread { background: rgba(201,148,58,.04); }
+  .notif-dot-wrap {
+    width: 8px; flex-shrink: 0; display: flex;
+    align-items: center; justify-content: center; padding-top: 6px;
+  }
+  .notif-dot-ind {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold);
+  }
+  .notif-icon {
+    width: 36px; height: 36px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 16px;
+    background: var(--ivory); border: 1px solid rgba(201,148,58,.12);
+  }
+  .notif-text { flex: 1; min-width: 0; }
+  .notif-msg { font-size: 13px; color: var(--soil); line-height: 1.5; margin-bottom: 2px; }
+  .notif-time { font-size: 11px; color: var(--muted); }
+
+  /* ══════════════════════════════════════
+     QUICK ACTIONS
+  ══════════════════════════════════════ */
+  .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px; }
+  .qa-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 16px 10px; border-radius: var(--radius);
+    background: var(--ivory); border: 1.5px solid rgba(201,148,58,.1);
+    cursor: pointer; text-decoration: none;
+    transition: border-color var(--trans), background var(--trans), transform var(--trans);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .qa-btn:hover { border-color: var(--gold); background: rgba(201,148,58,.04); transform: translateY(-2px); }
+  .qa-btn svg { width: 22px; height: 22px; color: var(--earth); }
+  .qa-label { font-size: 12px; font-weight: 500; color: var(--soil); text-align: center; }
+
+  /* ══════════════════════════════════════
+     PROFILE SECTION
+  ══════════════════════════════════════ */
+  .profile-header-card {
+    background: var(--bark);
+    background-image: radial-gradient(ellipse at 20% 50%, rgba(201,148,58,.2) 0%, transparent 55%);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    display: flex; align-items: center; gap: 24px;
+    margin-bottom: 24px;
+    position: relative; overflow: hidden;
+  }
+  .profile-header-card::after {
+    content: '';
+    position: absolute; width: 300px; height: 300px; border-radius: 50%;
+    top: -120px; right: -80px;
+    border: 1px solid rgba(201,148,58,.12);
+    pointer-events: none;
+  }
+  .profile-big-avatar {
+    width: 80px; height: 80px; border-radius: 20px;
+    background: linear-gradient(135deg, var(--clay), var(--sand));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px; flex-shrink: 0;
+    border: 3px solid rgba(201,148,58,.3);
+    box-shadow: 0 4px 20px rgba(26,18,8,.3);
+  }
+  .profile-intro { flex: 1; }
+  .profile-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 700; color: var(--cream); margin-bottom: 4px;
+  }
+  .profile-role { font-size: 14px; color: var(--sand); margin-bottom: 10px; }
+  .profile-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+  .profile-meta-item { font-size: 12.5px; color: rgba(212,169,106,.7); display: flex; align-items: center; gap: 5px; }
+  .profile-meta-item svg { width: 13px; height: 13px; }
+  .profile-edit-btn {
+    padding: 9px 20px;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(201,148,58,.25);
+    color: var(--sand); border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: background var(--trans); flex-shrink: 0;
+  }
+  .profile-edit-btn:hover { background: rgba(255,255,255,.16); }
+
+  .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .form-label {
+    font-size: 11.5px; font-weight: 500; color: var(--earth);
+    letter-spacing: .4px; text-transform: uppercase;
+  }
+  .form-input {
+    height: 44px; padding: 0 14px;
+    background: var(--ivory); border: 1.5px solid #e8dcc8;
+    border-radius: 8px; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; color: var(--soil); outline: none;
+    transition: border-color var(--trans), box-shadow var(--trans);
+  }
+  .form-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,148,58,.1); }
+  .form-textarea {
+    padding: 12px 14px; height: 100px; resize: none;
+    background: var(--ivory); border: 1.5px solid #e8dcc8;
+    border-radius: 8px; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; color: var(--soil); outline: none;
+    transition: border-color var(--trans);
+  }
+  .form-textarea:focus { border-color: var(--gold); }
+  .btn-save {
+    padding: 11px 28px;
+    background: linear-gradient(135deg, var(--earth), var(--gold));
+    color: white; border: none; border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    cursor: pointer; box-shadow: 0 3px 12px rgba(92,61,30,.28);
+    transition: transform var(--trans), box-shadow var(--trans);
+  }
+  .btn-save:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(92,61,30,.35); }
+
+  /* Skills tags editable */
+  .skills-wrap {
+    display: flex; flex-wrap: wrap; gap: 7px;
+    padding: 10px;
+    background: var(--ivory); border: 1.5px solid #e8dcc8; border-radius: 8px;
+    min-height: 48px;
+  }
+  .skill-chip {
+    padding: 4px 10px 4px 12px; background: var(--cream);
+    border-radius: 99px; font-size: 12.5px; color: var(--earth);
+    border: 1px solid rgba(201,148,58,.2);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .skill-chip button {
+    background: none; border: none; cursor: pointer;
+    color: var(--clay); font-size: 13px; line-height: 1;
+    transition: color var(--trans); padding: 0;
+  }
+  .skill-chip button:hover { color: var(--error); }
+
+  /* ══════════════════════════════════════
+     EARNINGS CHART (CSS-only bar chart)
+  ══════════════════════════════════════ */
+  .chart-wrap { padding: 20px 22px; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 10px; height: 120px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .bar {
+    width: 100%; border-radius: 5px 5px 0 0;
+    background: linear-gradient(to top, var(--earth), var(--gold));
+    transition: height .6s cubic-bezier(.4,0,.2,1);
+    cursor: pointer; position: relative;
+  }
+  .bar:hover::after {
+    content: attr(data-val);
+    position: absolute; top: -24px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--soil); color: var(--cream);
+    font-size: 10px; padding: 2px 7px; border-radius: 4px;
+    white-space: nowrap; pointer-events: none;
+  }
+  .bar-label { font-size: 10.5px; color: var(--muted); }
+
+  /* ══════════════════════════════════════
+     FIND WORKERS PAGE (within dashboard)
+  ══════════════════════════════════════ */
+  .worker-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+  .w-chip {
+    background: white; border-radius: var(--radius-lg);
+    border: 1.5px solid rgba(201,148,58,.08);
+    padding: 16px; box-shadow: var(--shadow);
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer; transition: all var(--trans);
+  }
+  .w-chip:hover { border-color: rgba(201,148,58,.25); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .w-chip-avatar {
+    width: 46px; height: 46px; border-radius: 12px;
+    background: var(--cream); display: flex; align-items: center;
+    justify-content: center; font-size: 22px; flex-shrink: 0;
+    border: 1.5px solid rgba(201,148,58,.12);
+    position: relative;
+  }
+  .w-chip-dot {
+    position: absolute; bottom: -2px; right: -2px;
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 2px solid white;
+  }
+  .w-chip-dot.available { background: var(--sage); }
+  .w-chip-dot.busy      { background: var(--sand); }
+  .w-chip-info { min-width: 0; flex: 1; }
+  .w-chip-name { font-size: 13.5px; font-weight: 500; color: var(--soil); margin-bottom: 1px; }
+  .w-chip-role { font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
+  .w-chip-rating { font-size: 12px; color: var(--gold); font-weight: 500; }
+
+  /* ══════════════════════════════════════
+     MESSAGES
+  ══════════════════════════════════════ */
+  .msg-layout { display: grid; grid-template-columns: 240px 1fr; height: calc(100vh - 180px); background: white; border-radius: var(--radius-lg); border: 1.5px solid rgba(201,148,58,.08); overflow: hidden; box-shadow: var(--shadow); }
+  .msg-list { border-right: 1px solid rgba(201,148,58,.1); overflow-y: auto; }
+  .msg-list-head { padding: 16px 16px 12px; font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; color: var(--soil); border-bottom: 1px solid rgba(201,148,58,.08); }
+  .msg-thread {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; border-bottom: 1px solid rgba(201,148,58,.06);
+    cursor: pointer; transition: background var(--trans);
+  }
+  .msg-thread:hover { background: rgba(201,148,58,.04); }
+  .msg-thread.active { background: rgba(201,148,58,.07); }
+  .msg-avatar {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: var(--cream); display: flex; align-items: center;
+    justify-content: center; font-size: 18px; flex-shrink: 0;
+  }
+  .msg-thread-info { flex: 1; min-width: 0; }
+  .msg-thread-name { font-size: 13px; font-weight: 500; color: var(--soil); }
+  .msg-thread-preview { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .msg-unread { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+  .msg-chat { display: flex; flex-direction: column; }
+  .msg-chat-head {
+    padding: 14px 20px; border-bottom: 1px solid rgba(201,148,58,.08);
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(250,247,239,.5);
+  }
+  .msg-chat-name { font-size: 14px; font-weight: 500; color: var(--soil); }
+  .msg-chat-role { font-size: 11.5px; color: var(--muted); }
+  .msg-chat-status { margin-left: auto; font-size: 12px; color: var(--sage); display: flex; align-items: center; gap: 5px; }
+  .msg-chat-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--sage); }
+
+  .msg-bubbles { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .bubble { max-width: 70%; }
+  .bubble.sent { align-self: flex-end; }
+  .bubble.recv { align-self: flex-start; }
+  .bubble-text {
+    padding: 10px 14px; border-radius: 14px;
+    font-size: 13.5px; line-height: 1.55;
+  }
+  .bubble.sent .bubble-text  { background: linear-gradient(135deg, var(--earth), var(--gold)); color: white; border-bottom-right-radius: 3px; }
+  .bubble.recv .bubble-text  { background: var(--ivory); color: var(--soil); border: 1px solid rgba(201,148,58,.12); border-bottom-left-radius: 3px; }
+  .bubble-time { font-size: 10.5px; color: var(--muted); margin-top: 4px; }
+  .bubble.sent .bubble-time  { text-align: right; }
+
+  .msg-input-row {
+    padding: 14px 20px;
+    border-top: 1px solid rgba(201,148,58,.1);
+    display: flex; gap: 10px; align-items: center;
+  }
+  .msg-input {
+    flex: 1; height: 42px; padding: 0 14px;
+    background: var(--ivory); border: 1.5px solid #e8dcc8; border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--soil);
+    outline: none; transition: border-color var(--trans);
+  }
+  .msg-input:focus { border-color: var(--gold); }
+  .msg-send-btn {
+    width: 42px; height: 42px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--earth), var(--gold));
+    border: none; cursor: pointer; color: white;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform var(--trans);
+  }
+  .msg-send-btn:hover { transform: translateY(-1px); }
+  .msg-send-btn svg { width: 16px; height: 16px; }
+
+  /* ══════════════════════════════════════
+     TOAST
+  ══════════════════════════════════════ */
+  .toast {
+    position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+    background: var(--soil); color: var(--cream);
+    padding: 12px 18px; border-radius: var(--radius);
+    display: flex; align-items: center; gap: 9px; font-size: 13.5px;
+    box-shadow: var(--shadow-md);
+    transform: translateY(80px); opacity: 0; pointer-events: none;
+    transition: transform .4s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast svg { width: 16px; height: 16px; color: var(--sage); flex-shrink: 0; }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════ */
+  @media (max-width: 1100px) {
+    .stats-grid { grid-template-columns: repeat(2,1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .profile-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 860px) {
+    :root { --sidebar: 0px; }
+    .sidebar { transform: translateX(-256px); width: 256px; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .main::before { left: 0; }
+    .hamburger { display: flex; }
+    .msg-layout { grid-template-columns: 1fr; }
+    .msg-list { display: none; }
+  }
+  @media (max-width: 560px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .page-section { padding: 20px 16px 40px; }
+    .topbar { padding: 0 16px; }
+  }
+  </style>
+</head>
+<body>
+
+  <!-- ══ SIDEBAR ════════════════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-logo">
+      <div class="logo-mark"><span>N</span></div>
+      <span class="logo-text">Nesamani</span>
+    </a>
+
+    <div class="sidebar-user" onclick="navigate('profile')">
+      <div class="user-avatar" id="sidebarAvatar">👤</div>
+      <div class="user-info">
+        <div class="user-name" id="sidebarName">Ravi Kumar</div>
+        <div class="user-role-badge" id="sidebarRole">Worker</div>
+      </div>
+      <div class="user-chevron">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+
+      <button class="nav-item active" onclick="navigate('overview')" id="nav-overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        Overview
+      </button>
+
+      <button class="nav-item" onclick="navigate('jobs')" id="nav-jobs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <rect x="2" y="7" width="20" height="14" rx="2"/>
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+        My Jobs
+        <span class="nav-badge">3</span>
+      </button>
+
+      <button class="nav-item" onclick="navigate('find')" id="nav-find">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        Find Workers
+      </button>
+
+      <button class="nav-item" onclick="navigate('messages')" id="nav-messages">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        Messages
+        <span class="nav-badge">2</span>
+      </button>
+
+      <div class="nav-section-label">Account</div>
+
+      <button class="nav-item" onclick="navigate('earnings')" id="nav-earnings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+        Earnings
+      </button>
+
+      <button class="nav-item" onclick="navigate('notifications')" id="nav-notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        Notifications
+        <span class="nav-badge">4</span>
+      </button>
+
+      <button class="nav-item" onclick="navigate('profile')" id="nav-profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        Profile
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="doLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Log Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ═══════════════════════════ -->
+  <div class="main" id="main">
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <span class="page-title" id="pageTitle">Overview</span>
+      </div>
+      <div class="topbar-right">
+        <!-- Role switch -->
+        <div class="role-switch">
+          <button class="role-sw-btn active" id="roleWorker" onclick="switchRole('worker')">Worker</button>
+          <button class="role-sw-btn" id="roleCustomer" onclick="switchRole('customer')">Customer</button>
+        </div>
+        <!-- Notifications -->
+        <button class="topbar-btn" onclick="navigate('notifications')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <div class="notif-dot"></div>
+        </button>
+        <!-- Settings -->
+        <button class="topbar-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ SECTION: OVERVIEW ════════════ -->
+    <section class="page-section active" id="sec-overview">
+      <div class="section-greeting">
+        <div class="greeting-text" id="greetingText">Good morning, Ravi 👋</div>
+        <div class="greeting-sub" id="greetingSub">Here's what's happening with your account today.</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid" id="statsGrid"></div>
+
+      <!-- Two col -->
+      <div class="two-col">
+        <!-- Recent Jobs -->
+        <div class="panel">
+          <div class="panel-head">
+            <span class="panel-title">Recent Jobs</span>
+            <a class="panel-link" onclick="navigate('jobs')">View all →</a>
+          </div>
+          <div class="panel-body" id="recentJobsPanel"></div>
+        </div>
+
+        <!-- Right col -->
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <!-- Quick Actions -->
+          <div class="panel">
+            <div class="panel-head"><span class="panel-title">Quick Actions</span></div>
+            <div class="quick-actions" id="quickActionsPanel"></div>
+          </div>
+          <!-- Notifications mini -->
+          <div class="panel">
+            <div class="panel-head">
+              <span class="panel-title">Notifications</span>
+              <a class="panel-link" onclick="navigate('notifications')">See all →</a>
+            </div>
+            <div class="panel-body" id="miniNotifPanel"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SECTION: JOBS ════════════════ -->
+    <section class="page-section" id="sec-jobs">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--soil);margin-bottom:4px">My Jobs</div>
+          <div style="font-size:13px;color:var(--muted);font-weight:300">Track all your job requests and completed work.</div>
+        </div>
+        <a href="find-job.html" style="padding:10px 22px;background:linear-gradient(135deg,var(--earth),var(--gold));color:white;border-radius:8px;font-size:13.5px;font-weight:500;text-decoration:none;box-shadow:0 3px 12px rgba(92,61,30,.28)">+ Post a Job</a>
+      </div>
+
+      <!-- Filter tabs -->
+      <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap" id="jobFilterTabs">
+        <button class="sort-btn active" data-filter="all"    onclick="filterJobs(this)">All Jobs</button>
+        <button class="sort-btn" data-filter="active"    onclick="filterJobs(this)">Active</button>
+        <button class="sort-btn" data-filter="pending"   onclick="filterJobs(this)">Pending</button>
+        <button class="sort-btn" data-filter="completed" onclick="filterJobs(this)">Completed</button>
+        <button class="sort-btn" data-filter="cancelled" onclick="filterJobs(this)">Cancelled</button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body" id="allJobsPanel"></div>
+      </div>
+    </section>
+
+    <!-- ══ SECTION: FIND WORKERS ════════ -->
+    <section class="page-section" id="sec-find">
+      <div style="margin-bottom:24px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--soil);margin-bottom:4px">Find Workers</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:300">Browse skilled professionals near you.</div>
+      </div>
+
+      <!-- search mini -->
+      <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap">
+        <div style="flex:1;min-width:180px;display:flex;align-items:center;gap:8px;padding:10px 14px;background:white;border:1.5px solid #e8dcc8;border-radius:8px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--clay)" stroke-width="1.7"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input id="dashSearchInput" type="text" placeholder="Search by name or skill…"
+            style="border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--soil);outline:none;flex:1"
+            oninput="filterDashWorkers()">
+        </div>
+        <a href="find-job.html" style="padding:10px 20px;background:linear-gradient(135deg,var(--earth),var(--gold));color:white;border-radius:8px;font-size:13.5px;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Full Search
+        </a>
+      </div>
+
+      <div class="worker-chips" id="dashWorkers"></div>
+    </section>
+
+    <!-- ══ SECTION: MESSAGES ═══════════ -->
+    <section class="page-section" id="sec-messages">
+      <div style="margin-bottom:20px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--soil);margin-bottom:4px">Messages</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:300">Chat directly with workers and customers.</div>
+      </div>
+      <div class="msg-layout">
+        <div class="msg-list">
+          <div class="msg-list-head">Chats</div>
+          <div id="msgThreadList"></div>
+        </div>
+        <div class="msg-chat">
+          <div class="msg-chat-head">
+            <div class="msg-avatar" id="chatAvatar">🔧</div>
+            <div>
+              <div class="msg-chat-name" id="chatName">Murugan Selvam</div>
+              <div class="msg-chat-role" id="chatRole">Plumber · Trichy</div>
+            </div>
+            <div class="msg-chat-status">Online</div>
+          </div>
+          <div class="msg-bubbles" id="chatBubbles"></div>
+          <div class="msg-input-row">
+            <input class="msg-input" id="msgInput" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendMsg()">
+            <button class="msg-send-btn" onclick="sendMsg()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SECTION: EARNINGS ════════════ -->
+    <section class="page-section" id="sec-earnings">
+      <div style="margin-bottom:24px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--soil);margin-bottom:4px">Earnings</div>
+        <div style="font-size:13px;color:var(--muted);font-weight:300">Track your income and payment history.</div>
+      </div>
+
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px">
+        <div class="stat-card">
+          <div class="stat-card-icon gold">💰</div>
+          <div class="stat-val">₹18,400</div>
+          <div class="stat-key">Total Earned</div>
+          <div class="stat-delta up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg> +12% this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon sage">📅</div>
+          <div class="stat-val">₹3,200</div>
+          <div class="stat-key">This Month</div>
+          <div class="stat-delta up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg> +5% vs last</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon earth">⏳</div>
+          <div class="stat-val">₹1,800</div>
+          <div class="stat-key">Pending</div>
+          <div class="stat-delta" style="color:var(--warning)">2 payments pending</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-head"><span class="panel-title">Monthly Earnings</span></div>
+          <div class="chart-wrap">
+            <div class="bar-chart" id="earningsChart"></div>
+            <div style="display:flex;gap:10px;margin-top:4px">
+              <div id="earningsBarLabels" style="display:flex;gap:10px;width:100%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><span class="panel-title">Payment History</span></div>
+          <div class="panel-body" id="paymentHistory"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SECTION: NOTIFICATIONS ═══════ -->
+    <section class="page-section" id="sec-notifications">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--soil);margin-bottom:4px">Notifications</div>
+          <div style="font-size:13px;color:var(--muted);font-weight:300">Stay up to date with your job activity.</div>
+        </div>
+        <button onclick="markAllRead()" style="padding:8px 16px;background:white;border:1.5px solid #e8dcc8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;transition:all var(--trans)" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='#e8dcc8'">Mark all read</button>
+      </div>
+      <div class="panel">
+        <div class="panel-body" id="allNotifPanel"></div>
+      </div>
+    </section>
+
+    <!-- ══ SECTION: PROFILE ═══════════ -->
+    <section class="page-section" id="sec-profile">
+      <div class="profile-header-card">
+        <div class="profile-big-avatar" id="profileAvatar">👤</div>
+        <div class="profile-intro">
+          <div class="profile-name" id="profileName">Ravi Kumar</div>
+          <div class="profile-role" id="profileRoleText">Worker · Joined Jan 2025</div>
+          <div class="profile-meta">
+            <span class="profile-meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Trichy, Tamil Nadu
+            </span>
+            <span class="profile-meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.9 Rating
+            </span>
+            <span class="profile-meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+              342 Jobs Completed
+            </span>
+          </div>
+        </div>
+        <button class="profile-edit-btn" onclick="showToast('Profile edit saved!')">Save Changes</button>
+      </div>
+
+      <div class="profile-grid">
+        <!-- Left -->
+        <div class="panel" style="padding:24px">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--soil);margin-bottom:20px">Personal Info</div>
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input class="form-input" id="pName" value="Ravi Kumar">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-input" id="pEmail" value="ravi.kumar@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input class="form-input" id="pPhone" value="+91 98765 43210">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Location</label>
+            <input class="form-input" id="pLocation" value="Trichy, Tamil Nadu">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bio</label>
+            <textarea class="form-textarea" id="pBio">Experienced plumber with 10+ years of hands-on work. Known for punctuality and fair pricing.</textarea>
+          </div>
+          <button class="btn-save" onclick="saveProfile()">Save Changes</button>
+        </div>
+
+        <!-- Right -->
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div class="panel" style="padding:24px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--soil);margin-bottom:16px">Skills</div>
+            <div class="skills-wrap" id="skillsWrap"></div>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <input class="form-input" id="skillInput" placeholder="Add a skill…" onkeydown="if(event.key==='Enter')addSkill()" style="flex:1">
+              <button onclick="addSkill()" style="padding:0 16px;background:var(--cream);border:1.5px solid rgba(201,148,58,.2);border-radius:8px;cursor:pointer;font-size:13px;color:var(--earth);font-family:'DM Sans',sans-serif">Add</button>
+            </div>
+          </div>
+
+          <div class="panel" style="padding:24px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--soil);margin-bottom:16px">Account Stats</div>
+            <div style="display:flex;flex-direction:column;gap:12px" id="profileStats"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /.main -->
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+  /* ════════════════════════════════════════
+     DATA
+  ════════════════════════════════════════ */
+  const USER = {
+    name: 'Ravi Kumar', role: 'worker',
+    avatar: '🔧', location: 'Trichy'
+  };
+
+  const JOBS = [
+    { id:1, title:'Fix kitchen pipe leak', worker:'Murugan Selvam', icon:'🔧', category:'Plumber', date:'12 Mar 2026', status:'completed', amount:'₹850' },
+    { id:2, title:'Rewire living room switches', worker:'Lakshmi Rajan', icon:'⚡', category:'Electrician', date:'10 Mar 2026', status:'active', amount:'₹1,200' },
+    { id:3, title:'Interior wall painting', worker:'Rajan Annamalai', icon:'🎨', category:'Painter', date:'08 Mar 2026', status:'pending', amount:'₹4,500' },
+    { id:4, title:'Airport pickup & drop', worker:'Senthil Kumar', icon:'🚗', category:'Driver', date:'05 Mar 2026', status:'completed', amount:'₹600' },
+    { id:5, title:'Weekly home cleaning', worker:'Geetha Devi', icon:'🏠', category:'Maid', date:'01 Mar 2026', status:'active', amount:'₹1,800' },
+    { id:6, title:'Custom bookshelf build', worker:'Pandi Raj', icon:'🪵', category:'Carpenter', date:'26 Feb 2026', status:'completed', amount:'₹3,200' },
+    { id:7, title:'Garden layout & plants', worker:'Malar Vizhi', icon:'🌿', category:'Gardener', date:'20 Feb 2026', status:'cancelled', amount:'₹1,500' },
+    { id:8, title:'Daily cooking — breakfast', worker:'Chitra Priya', icon:'🍳', category:'Cook', date:'15 Feb 2026', status:'completed', amount:'₹2,400' },
+  ];
+
+  const NOTIFICATIONS = [
+    { id:1, icon:'✅', msg:'Your job with <strong>Murugan Selvam</strong> has been marked complete.', time:'2 mins ago', read:false },
+    { id:2, icon:'💬', msg:'<strong>Lakshmi Rajan</strong> sent you a message about the wiring job.', time:'1 hr ago', read:false },
+    { id:3, icon:'⭐', msg:'You received a new 5-star review from Priya N.', time:'3 hrs ago', read:false },
+    { id:4, icon:'🔔', msg:'<strong>Geetha Devi</strong> accepted your cleaning request for next week.', time:'Yesterday', read:false },
+    { id:5, icon:'💰', msg:'Payment of ₹850 received for pipe repair job.', time:'2 days ago', read:true },
+    { id:6, icon:'📋', msg:'Your profile was viewed 12 times this week.', time:'3 days ago', read:true },
+  ];
+
+  const WORKERS_SAMPLE = [
+    { name:'Murugan Selvam', role:'Plumber · Trichy', icon:'🔧', rating:'4.9', availability:'available' },
+    { name:'Lakshmi Rajan', role:'Electrician · Madurai', icon:'⚡', rating:'4.8', availability:'available' },
+    { name:'Rajan Annamalai', role:'Painter · Coimbatore', icon:'🎨', rating:'4.7', availability:'busy' },
+    { name:'Senthil Kumar', role:'Driver · Chennai', icon:'🚗', rating:'4.9', availability:'available' },
+    { name:'Geetha Devi', role:'Maid · Trichy', icon:'🏠', rating:'4.8', availability:'available' },
+    { name:'Pandi Raj', role:'Carpenter · Salem', icon:'🪵', rating:'4.6', availability:'available' },
+    { name:'Malar Vizhi', role:'Gardener · Erode', icon:'🌿', rating:'4.7', availability:'busy' },
+    { name:'Chitra Priya', role:'Cook · Madurai', icon:'🍳', rating:'4.9', availability:'available' },
+  ];
+
+  const MESSAGES = [
+    { avatar:'🔧', name:'Murugan Selvam', role:'Plumber · Trichy', preview:'I can come tomorrow morning', unread:true,
+      chat:[
+        { from:'them', text:'Hello! I saw your request for pipe fixing.', time:'10:02 AM' },
+        { from:'me',   text:'Yes, it is leaking near the kitchen sink. Can you come today?', time:'10:05 AM' },
+        { from:'them', text:'Sorry, I am fully booked today. I can come tomorrow morning around 9 AM.', time:'10:07 AM' },
+        { from:'me',   text:'That works. Please confirm before coming.', time:'10:09 AM' },
+        { from:'them', text:'Sure, I will call you at 8:30 AM. Approximate cost will be ₹600–₹900.', time:'10:10 AM' },
+      ]
+    },
+    { avatar:'⚡', name:'Lakshmi Rajan', role:'Electrician · Madurai', preview:'The wiring is done!', unread:true,
+      chat:[
+        { from:'me',   text:'Hi Lakshmi, can you check our living room wiring?', time:'Yesterday' },
+        { from:'them', text:'Yes, I will assess and give a quote. When are you free?', time:'Yesterday' },
+        { from:'me',   text:'This Saturday works.', time:'Yesterday' },
+        { from:'them', text:'The wiring is done! Everything is safe and tested.', time:'Today 9:00 AM' },
+      ]
+    },
+    { avatar:'🍳', name:'Chitra Priya', role:'Cook · Madurai', preview:'Menu for tomorrow…', unread:false,
+      chat:[
+        { from:'them', text:'Good morning! What would you like for tomorrow\'s breakfast menu?', time:'8:00 AM' },
+        { from:'me',   text:'Idly, sambar, and coconut chutney please.', time:'8:15 AM' },
+        { from:'them', text:'Of course! I will have everything ready by 7:30 AM.', time:'8:17 AM' },
+      ]
+    },
+  ];
+
+  const EARNINGS_DATA = [
+    { month:'Sep', val:2100 }, { month:'Oct', val:2800 }, { month:'Nov', val:1900 },
+    { month:'Dec', val:3400 }, { month:'Jan', val:2600 }, { month:'Feb', val:3100 },
+    { month:'Mar', val:3200 },
+  ];
+
+  let SKILLS = ['Pipe Fitting','Drainage','Solar Water','Bathroom Fix','Leak Repair'];
+  let currentRole = 'worker';
+  let activeThread = 0;
+  let currentJobFilter = 'all';
+
+  /* ════════════════════════════════════════
+     INIT
+  ════════════════════════════════════════ */
+  window.addEventListener('DOMContentLoaded', () => {
+    updateGreeting();
+    renderStats();
+    renderRecentJobs();
+    renderQuickActions();
+    renderMiniNotifs();
+    renderAllJobs();
+    renderDashWorkers();
+    renderMsgThreads();
+    renderChat(0);
+    renderEarningsChart();
+    renderPaymentHistory();
+    renderNotifications();
+    renderProfileSkills();
+    renderProfileStats();
+    updateSidebarUser();
+  });
+
+  /* ════════════════════════════════════════
+     NAVIGATION
+  ════════════════════════════════════════ */
+  const PAGE_TITLES = {
+    overview:'Overview', jobs:'My Jobs', find:'Find Workers',
+    messages:'Messages', earnings:'Earnings', notifications:'Notifications', profile:'Profile'
+  };
+
+  function navigate(page) {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('sec-' + page).classList.add('active');
+    const navEl = document.getElementById('nav-' + page);
+    if (navEl) navEl.classList.add('active');
+    document.getElementById('pageTitle').textContent = PAGE_TITLES[page] || '';
+    // close mobile sidebar
+    document.getElementById('sidebar').classList.remove('open');
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  /* ════════════════════════════════════════
+     GREETING
+  ════════════════════════════════════════ */
+  function updateGreeting() {
+    const h = new Date().getHours();
+    const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+    const firstName = USER.name.split(' ')[0];
+    document.getElementById('greetingText').textContent = `${greet}, ${firstName} 👋`;
+    document.getElementById('sidebarName').textContent = USER.name;
+    document.getElementById('sidebarAvatar').textContent = USER.avatar;
+    document.getElementById('profileName').textContent = USER.name;
+  }
+
+  /* ════════════════════════════════════════
+     ROLE SWITCH
+  ════════════════════════════════════════ */
+  function switchRole(role) {
+    currentRole = role;
+    document.getElementById('roleWorker').classList.toggle('active', role === 'worker');
+    document.getElementById('roleCustomer').classList.toggle('active', role === 'customer');
+    document.getElementById('sidebarRole').textContent = role === 'worker' ? 'Worker' : 'Customer';
+    document.getElementById('profileRoleText').textContent = (role === 'worker' ? 'Worker' : 'Customer') + ' · Joined Jan 2025';
+    renderStats();
+    renderQuickActions();
+    showToast(`Switched to ${role === 'worker' ? 'Worker' : 'Customer'} view`);
+  }
+
+  /* ════════════════════════════════════════
+     STATS
+  ════════════════════════════════════════ */
+  function renderStats() {
+    const isWorker = currentRole === 'worker';
+    const stats = isWorker
+      ? [
+          { icon:'💼', cls:'gold',  val:'342',     key:'Jobs Done',      delta:'up',   text:'+8 this month' },
+          { icon:'⭐', cls:'sage',  val:'4.9',     key:'Avg Rating',     delta:'up',   text:'+0.1 this month' },
+          { icon:'💰', cls:'earth', val:'₹18,400', key:'Total Earned',   delta:'up',   text:'+₹3,200 this month' },
+          { icon:'👁️', cls:'clay',  val:'1,240',   key:'Profile Views',  delta:'up',   text:'+120 this week' },
+        ]
+      : [
+          { icon:'📋', cls:'gold',  val:'8',       key:'Jobs Posted',    delta:'up',   text:'+2 this month' },
+          { icon:'✅', cls:'sage',  val:'6',       key:'Completed',      delta:'up',   text:'75% completion' },
+          { icon:'💰', cls:'earth', val:'₹12,550', key:'Total Spent',    delta:'down', text:'+₹2,400 this month' },
+          { icon:'⭐', cls:'clay',  val:'4.8',     key:'Avg Review',     delta:'up',   text:'You left 5 reviews' },
+        ];
+
+    document.getElementById('statsGrid').innerHTML = stats.map(s => `
+      <div class="stat-card">
+        <div class="stat-card-icon ${s.cls}">${s.icon}</div>
+        <div class="stat-val">${s.val}</div>
+        <div class="stat-key">${s.key}</div>
+        <div class="stat-delta ${s.delta}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            ${s.delta === 'up' ? '<polyline points="18 15 12 9 6 15"/>' : '<polyline points="6 9 12 15 18 9"/>'}
+          </svg>
+          ${s.text}
+        </div>
+      </div>`).join('');
+  }
+
+  /* ════════════════════════════════════════
+     RECENT JOBS (overview panel)
+  ════════════════════════════════════════ */
+  function renderRecentJobs() {
+    document.getElementById('recentJobsPanel').innerHTML =
+      JOBS.slice(0,5).map(j => jobRowHTML(j)).join('');
+  }
+
+  function jobRowHTML(j) {
+    return `
+    <div class="job-row" onclick="navigate('jobs')">
+      <div class="job-icon">${j.icon}</div>
+      <div class="job-details">
+        <div class="job-title">${j.title}</div>
+        <div class="job-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${j.worker}</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${j.date}</span>
+        </div>
+      </div>
+      <span class="job-status ${j.status}">${j.status}</span>
+      <span class="job-date" style="font-weight:500;color:var(--soil)">${j.amount}</span>
+    </div>`;
+  }
+
+  /* ════════════════════════════════════════
+     ALL JOBS (jobs section)
+  ════════════════════════════════════════ */
+  function renderAllJobs(filter = 'all') {
+    const filtered = filter === 'all' ? JOBS : JOBS.filter(j => j.status === filter);
+    document.getElementById('allJobsPanel').innerHTML = filtered.length
+      ? filtered.map(j => jobRowHTML(j)).join('')
+      : `<div style="padding:48px;text-align:center;color:var(--muted);font-size:14px">No jobs found for this filter.</div>`;
+  }
+
+  function filterJobs(btn) {
+    document.querySelectorAll('#jobFilterTabs .sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderAllJobs(btn.dataset.filter);
+  }
+
+  /* ════════════════════════════════════════
+     QUICK ACTIONS
+  ════════════════════════════════════════ */
+  function renderQuickActions() {
+    const isWorker = currentRole === 'worker';
+    const actions = isWorker
+      ? [
+          { icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`, label:'Edit Profile',  href:'#', fn:"navigate('profile')" },
+          { icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>`, label:'Find Jobs', href:'find-job.html', fn:'' },
+          { icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`, label:'Messages',   href:'#', fn:"navigate('messages')" },
+          { icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`, label:'Earnings', href:'#', fn:"navigate('earnings')" },
+        ]
+      : [
+          { icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>`, label:'Find Worker', href:'find-job.html', fn:'' },
+          { icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>`, label:'Post a Job', href:'#', fn:"showToast('Feature coming soon!')" },
+          { icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`, label:'Messages', href:'#', fn:"navigate('messages')" },
+          { icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.92 1.24l3-.12a2 2 0 0 1 2 1.72 17.8 17.8 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6"/></svg>`, label:'Support', href:'#', fn:"showToast('Support chat coming soon!')" },
+        ];
+
+    document.getElementById('quickActionsPanel').innerHTML = actions.map(a => `
+      <a class="qa-btn" href="${a.href}" onclick="${a.fn ? a.fn + ';return false' : ''}">
+        ${a.icon}
+        <span class="qa-label">${a.label}</span>
+      </a>`).join('');
+  }
+
+  /* ════════════════════════════════════════
+     MINI NOTIFICATIONS
+  ════════════════════════════════════════ */
+  function renderMiniNotifs() {
+    document.getElementById('miniNotifPanel').innerHTML =
+      NOTIFICATIONS.slice(0,3).map(n => `
+      <div class="notif-row ${n.read ? '' : 'unread'}">
+        <div class="notif-dot-wrap">${!n.read ? '<div class="notif-dot-ind"></div>' : ''}</div>
+        <div class="notif-icon">${n.icon}</div>
+        <div class="notif-text">
+          <div class="notif-msg">${n.msg}</div>
+          <div class="notif-time">${n.time}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  /* ════════════════════════════════════════
+     ALL NOTIFICATIONS
+  ════════════════════════════════════════ */
+  function renderNotifications() {
+    document.getElementById('allNotifPanel').innerHTML =
+      NOTIFICATIONS.map(n => `
+      <div class="notif-row ${n.read ? '' : 'unread'}" onclick="markRead(${n.id})">
+        <div class="notif-dot-wrap">${!n.read ? '<div class="notif-dot-ind"></div>' : ''}</div>
+        <div class="notif-icon">${n.icon}</div>
+        <div class="notif-text">
+          <div class="notif-msg">${n.msg}</div>
+          <div class="notif-time">${n.time}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  function markRead(id) {
+    const n = NOTIFICATIONS.find(x => x.id === id);
+    if (n) n.read = true;
+    renderNotifications();
+    renderMiniNotifs();
+  }
+
+  function markAllRead() {
+    NOTIFICATIONS.forEach(n => n.read = true);
+    renderNotifications();
+    renderMiniNotifs();
+    showToast('All notifications marked as read');
+  }
+
+  /* ════════════════════════════════════════
+     FIND WORKERS (dashboard section)
+  ════════════════════════════════════════ */
+  function renderDashWorkers(query = '') {
+    const filtered = query
+      ? WORKERS_SAMPLE.filter(w =>
+          w.name.toLowerCase().includes(query) || w.role.toLowerCase().includes(query))
+      : WORKERS_SAMPLE;
+
+    document.getElementById('dashWorkers').innerHTML = filtered.map(w => `
+      <div class="w-chip" onclick="showToast('Viewing ${w.name}…')">
+        <div class="w-chip-avatar">
+          ${w.icon}
+          <div class="w-chip-dot ${w.availability}"></div>
+        </div>
+        <div class="w-chip-info">
+          <div class="w-chip-name">${w.name}</div>
+          <div class="w-chip-role">${w.role}</div>
+          <div class="w-chip-rating">★ ${w.rating}</div>
+        </div>
+        <button onclick="event.stopPropagation();showToast('Contacting ${w.name}…')"
+          style="padding:6px 12px;background:var(--soil);color:white;border:none;border-radius:7px;font-size:11.5px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap">
+          Hire →
+        </button>
+      </div>`).join('');
+  }
+
+  function filterDashWorkers() {
+    renderDashWorkers(document.getElementById('dashSearchInput').value.trim().toLowerCase());
+  }
+
+  /* ════════════════════════════════════════
+     MESSAGES
+  ════════════════════════════════════════ */
+  function renderMsgThreads() {
+    document.getElementById('msgThreadList').innerHTML = MESSAGES.map((m, i) => `
+      <div class="msg-thread ${i === activeThread ? 'active' : ''}" onclick="renderChat(${i})">
+        <div class="msg-avatar">${m.avatar}</div>
+        <div class="msg-thread-info">
+          <div class="msg-thread-name">${m.name}</div>
+          <div class="msg-thread-preview">${m.preview}</div>
+        </div>
+        ${m.unread ? '<div class="msg-unread"></div>' : ''}
+      </div>`).join('');
+  }
+
+  function renderChat(idx) {
+    activeThread = idx;
+    const m = MESSAGES[idx];
+    document.getElementById('chatAvatar').textContent = m.avatar;
+    document.getElementById('chatName').textContent   = m.name;
+    document.getElementById('chatRole').textContent   = m.role;
+    document.getElementById('chatBubbles').innerHTML  = m.chat.map(c => `
+      <div class="bubble ${c.from === 'me' ? 'sent' : 'recv'}">
+        <div class="bubble-text">${c.text}</div>
+        <div class="bubble-time">${c.time}</div>
+      </div>`).join('');
+    document.getElementById('chatBubbles').scrollTop = 99999;
+    m.unread = false;
+    renderMsgThreads();
+  }
+
+  function sendMsg() {
+    const input = document.getElementById('msgInput');
+    const text = input.value.trim();
+    if (!text) return;
+    MESSAGES[activeThread].chat.push({ from:'me', text, time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
+    MESSAGES[activeThread].preview = text;
+    input.value = '';
+    renderChat(activeThread);
+  }
+
+  /* ════════════════════════════════════════
+     EARNINGS CHART
+  ════════════════════════════════════════ */
+  function renderEarningsChart() {
+    const max = Math.max(...EARNINGS_DATA.map(d => d.val));
+    document.getElementById('earningsChart').innerHTML = EARNINGS_DATA.map(d => `
+      <div class="bar-col" style="flex:1">
+        <div class="bar" style="height:${Math.round(d.val/max*110)}px" data-val="₹${d.val.toLocaleString('en-IN')}"></div>
+        <div class="bar-label">${d.month}</div>
+      </div>`).join('');
+  }
+
+  function renderPaymentHistory() {
+    const payments = [
+      { icon:'🔧', name:'Pipe Repair — Murugan', amount:'+₹850', date:'12 Mar', color:'var(--sage)' },
+      { icon:'🚗', name:'Airport Drop — Senthil', amount:'+₹600', date:'05 Mar', color:'var(--sage)' },
+      { icon:'🪵', name:'Bookshelf — Pandi Raj',  amount:'+₹3,200', date:'26 Feb', color:'var(--sage)' },
+      { icon:'🍳', name:'Daily Cook — Chitra',    amount:'+₹2,400', date:'15 Feb', color:'var(--sage)' },
+      { icon:'⚡', name:'Wiring — Lakshmi',       amount:'Pending', date:'10 Mar', color:'var(--warning)' },
+    ];
+    document.getElementById('paymentHistory').innerHTML = payments.map(p => `
+      <div class="job-row">
+        <div class="job-icon">${p.icon}</div>
+        <div class="job-details">
+          <div class="job-title" style="font-size:13px">${p.name}</div>
+          <div class="job-meta">${p.date}</div>
+        </div>
+        <span style="font-size:13.5px;font-weight:600;color:${p.color}">${p.amount}</span>
+      </div>`).join('');
+  }
+
+  /* ════════════════════════════════════════
+     PROFILE
+  ════════════════════════════════════════ */
+  function renderProfileSkills() {
+    document.getElementById('skillsWrap').innerHTML = SKILLS.map((s, i) => `
+      <div class="skill-chip">
+        ${s}
+        <button onclick="removeSkill(${i})">×</button>
+      </div>`).join('');
+  }
+
+  function addSkill() {
+    const input = document.getElementById('skillInput');
+    const val = input.value.trim();
+    if (!val || SKILLS.includes(val)) { input.value = ''; return; }
+    SKILLS.push(val);
+    input.value = '';
+    renderProfileSkills();
+    showToast(`"${val}" added to skills`);
+  }
+
+  function removeSkill(idx) {
+    SKILLS.splice(idx, 1);
+    renderProfileSkills();
+  }
+
+  function renderProfileStats() {
+    const stats = [
+      { label:'Member Since', val:'January 2025' },
+      { label:'Jobs Completed', val:'342' },
+      { label:'Average Rating', val:'4.9 ★' },
+      { label:'Response Rate', val:'98%' },
+      { label:'Profile Views', val:'1,240' },
+    ];
+    document.getElementById('profileStats').innerHTML = stats.map(s => `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--ivory);border-radius:8px;border:1px solid rgba(201,148,58,.1)">
+        <span style="font-size:13px;color:var(--muted)">${s.label}</span>
+        <span style="font-size:13.5px;font-weight:500;color:var(--soil)">${s.val}</span>
+      </div>`).join('');
+  }
+
+  function saveProfile() {
+    const name = document.getElementById('pName').value.trim();
+    if (name) {
+      USER.name = name;
+      updateGreeting();
+      document.getElementById('sidebarName').textContent = name;
+      document.getElementById('profileName').textContent = name;
+    }
+    showToast('Profile saved successfully!');
+  }
+
+  function updateSidebarUser() {
+    document.getElementById('sidebarAvatar').textContent = USER.avatar;
+    document.getElementById('sidebarName').textContent   = USER.name;
+    document.getElementById('sidebarRole').textContent   = 'Worker';
+    document.getElementById('profileAvatar').textContent = USER.avatar;
+  }
+
+  /* ════════════════════════════════════════
+     LOGOUT
+  ════════════════════════════════════════ */
+  function doLogout() {
+    showToast('Logging out…');
+    setTimeout(() => window.location.href = 'login.html', 1200);
+  }
+
+  /* ════════════════════════════════════════
+     TOAST
+  ════════════════════════════════════════ */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  /* ── sort btn style (shared) ── */
+  const sortBtnStyle = `.sort-btn{padding:6px 14px;font-size:12.5px;font-weight:500;color:var(--muted);background:white;border:1.5px solid #e8dcc8;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:color .22s,border-color .22s,background .22s}.sort-btn:hover{color:var(--earth);border-color:rgba(201,148,58,.3)}.sort-btn.active{color:var(--earth);border-color:var(--gold);background:rgba(201,148,58,.08)}`;
+  const style = document.createElement('style');
+  style.textContent = sortBtnStyle;
+  document.head.appendChild(style);
+  </script>
+</body>
+</html>
