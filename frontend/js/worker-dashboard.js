@@ -489,9 +489,7 @@ function wSaveProfile() {
   showToast('Profile saved successfully!');
 }
 
-/* ════════════════════════════════════════════
-   TOAST
-════════════════════════════════════════════ */
+/* TOAST */
 function showToast(msg) {
   const t  = document.getElementById('toast');
   const sp = document.getElementById('toastMsg');
