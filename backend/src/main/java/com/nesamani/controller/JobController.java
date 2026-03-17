@@ -49,7 +49,6 @@ public class JobController {
     @Autowired private JobService  jobService;
     @Autowired private UserService userService;
 
-    // ════════════════════════════════════════════════════════════════════════
     //  PUBLIC — no token needed
     // ════════════════════════════════════════════════════════════════════════
 
