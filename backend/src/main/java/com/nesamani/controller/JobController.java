@@ -50,7 +50,6 @@ public class JobController {
     @Autowired private UserService userService;
 
     //  PUBLIC — no token needed
-    // ════════════════════════════════════════════════════════════════════════
 
     /** Browse open jobs — optionally filter by category and/or location */
     @GetMapping("/api/jobs/open")
