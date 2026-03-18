@@ -141,9 +141,8 @@ public class JobController {
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════════
     //  CUSTOMER / PROVIDER ROUTES  (/api/customer/**)
-    // ════════════════════════════════════════════════════════════════════════
+   
 
     /** Provider dashboard — stats + active jobs + available workers */
     @GetMapping("/api/customer/dashboard")
@@ -288,10 +287,9 @@ public class JobController {
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════════
+
     //  SERIALISATION HELPERS  (Job / User / Application → Map)
     //  These keep the JSON response clean without needing Jackson annotations.
-    // ════════════════════════════════════════════════════════════════════════
 
     private Map<String, Object> jobToMap(Job j) {
         Map<String, Object> m = new HashMap<>();
