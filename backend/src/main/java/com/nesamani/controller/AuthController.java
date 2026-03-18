@@ -52,14 +52,14 @@ public class AuthController {
         }
     }
 
-    // ────────────────────────────────────────────────────────────────────────
+
     //  POST /api/auth/login
     //  Body:     { email, password }
     //  Response: { token, role, name, userId, email, phone }
     //
     //  IMPORTANT: role is LOWERCASE "worker" or "provider"
     //  The frontend auth.js redirectByRole() depends on this exact value.
-    // ────────────────────────────────────────────────────────────────────────
+    
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Dto.LoginRequest req) {
         if (req.getEmail() == null || req.getPassword() == null) {
