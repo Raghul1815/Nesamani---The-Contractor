@@ -1,5 +1,9 @@
 {
   "dependencies": {
     "git": "^0.1.5"
+  },
+  "devDependencies": {
+    "@aruvili/cloudcss": "^1.0.1",
+    "postcss": "^8.4.31"
   }
 }

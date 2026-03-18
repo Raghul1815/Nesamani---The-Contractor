@@ -69,9 +69,7 @@ public class JobController {
         return ResponseEntity.ok(workers.stream().map(this::workerToMap).collect(Collectors.toList()));
     }
 
-    // ════════════════════════════════════════════════════════════════════════
     //  WORKER ROUTES  (/api/worker/**)
-    // ════════════════════════════════════════════════════════════════════════
 
     /** Worker dashboard — stats + recent applications */
     @GetMapping("/api/worker/dashboard")
