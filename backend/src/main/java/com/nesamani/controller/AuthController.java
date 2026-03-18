@@ -23,10 +23,9 @@ public class AuthController {
     @Autowired private UserService userService;
     @Autowired private JwtUtil     jwtUtil;
 
-    // ────────────────────────────────────────────────────────────────────────
     //  POST /api/auth/register
     //  Body: { name, email, phone, password, role: "worker"|"provider" }
-    // ────────────────────────────────────────────────────────────────────────
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Dto.RegisterRequest req) {
         // Basic field validation
