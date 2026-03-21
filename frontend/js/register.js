@@ -94,7 +94,7 @@ document.getElementById('phone').addEventListener('blur', function() {
   setError('phone','phone-error', v && !/^\+?[0-9]{8,15}$/.test(v) ? 'Enter a valid phone number.' : '');
 });
 
-// Form submit
+// Form submit — INTEGRATED WITH api.js/auth.js
 document.getElementById('registerForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
@@ -134,20 +134,19 @@ document.getElementById('registerForm').addEventListener('submit', async functio
   btn.disabled = true;
 
   try {
-    const res = await fetch('http://localhost:8080/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, phone, password, role })
-    });
+    // Use standardized API (no auth needed for register)
+    const res = await API.auth.register({ name, email, phone, password, role });
+    
+    if (!res.success) {
+      throw new Error(res.error);
+    }
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Registration failed.');
-
-    showToast('Account created! Redirecting to login…');
+    showToast('Account created successfully! Redirecting to login…');
     setTimeout(() => { window.location.href = 'login.html'; }, 1600);
 
   } catch (err) {
     showToast(err.message || 'Registration failed. Please try again.', true);
+  } finally {
     btn.classList.remove('loading');
     btn.disabled = false;
   }

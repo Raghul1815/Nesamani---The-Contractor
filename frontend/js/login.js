@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-/* LOGIN HANDLER */
+/* LOGIN HANDLER — INTEGRATED WITH api.js/auth.js */
 async function handleLogin(e) {
   e.preventDefault();
 
@@ -79,68 +79,30 @@ async function handleLogin(e) {
   }
 
   try {
-
-    const res = await fetch("http://localhost:8080/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email, password })
-    });
-
-    let data = {};
-    try {
-      data = await res.json();
-    } catch {
-      data = {};
+    // Use standardized API
+    const res = await API.auth.login({ email, password });
+    
+    if (!res.success) {
+      throw new Error(res.error);
     }
 
-    if (!res.ok) {
-      throw new Error(data.message || "Invalid email or password.");
-    }
-
-    /* SAVE TOKEN */
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-    }
-
-    /* SAVE USER DATA */
-    if (data.name) {
-      localStorage.setItem("username", data.name);
-    }
-
-    if (data.role) {
-      localStorage.setItem("role", data.role);
-    }
-
+    // Use auth.js standardized session
+    saveSession(res.data);
+    
     showToast("Login successful! Redirecting…");
 
-    /* ROLE BASED REDIRECT */
+    // Standard role redirect
     setTimeout(() => {
-
-      const role = data.role;
-
-      if (role === "provider") {
-        window.location.href = "provider-dashboard.html";
-      } 
-      else if (role === "worker") {
-        window.location.href = "worker-dashboard.html";
-      } 
-      else {
-        window.location.href = "dashboard.html";
-      }
-
+      redirectByRole(res.data.role);
     }, 1200);
 
   } catch (err) {
-
     showToast(err.message || "Login failed. Please try again.", true);
-
+  } finally {
     if (btn) {
       btn.classList.remove("loading");
       btn.disabled = false;
     }
-
   }
 }
 
