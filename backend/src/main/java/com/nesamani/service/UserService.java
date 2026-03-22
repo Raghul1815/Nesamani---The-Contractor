@@ -6,107 +6,96 @@ import com.nesamani.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepo;
+    @Autowired private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    // ── Registration ──────────────────────────────────────────────────────────
+    // ── Register ──────────────────────────────────────────────
 
     /**
-     * Register a new user.
-     * Maps frontend role string ("worker" / "provider") to User.Role enum.
-     * Hashes password with BCrypt.
+     * Creates a new user.
+     * Accepts role as "needer" or "provider" (lowercase from frontend).
+     * Maps to User.Role.NEEDER or User.Role.PROVIDER.
      */
     public User register(Dto.RegisterRequest req) {
-        // Check for duplicate email
-        if (userRepository.existsByEmail(req.getEmail())) {
-            throw new RuntimeException("This email is already registered. Please login instead.");
-        }
+        if (req.getName() == null || req.getName().isBlank())
+            throw new RuntimeException("Name is required.");
+        if (req.getEmail() == null || req.getEmail().isBlank())
+            throw new RuntimeException("Email is required.");
+        if (req.getPassword() == null || req.getPassword().length() < 6)
+            throw new RuntimeException("Password must be at least 6 characters.");
 
-        // Validate role
-        String roleStr = req.getRole() == null ? "" : req.getRole().trim().toLowerCase();
-        if (!roleStr.equals("worker") && !roleStr.equals("provider")) {
-            throw new RuntimeException("Invalid role. Must be 'worker' or 'provider'.");
-        }
+        String role = req.getRole() == null ? "" : req.getRole().trim().toLowerCase();
+        if (!role.equals("needer") && !role.equals("provider"))
+            throw new RuntimeException("Role must be 'needer' or 'provider'.");
+
+        if (userRepo.existsByEmail(req.getEmail().trim().toLowerCase()))
+            throw new RuntimeException("This email is already registered. Please log in.");
 
         User user = new User();
         user.setName(req.getName().trim());
         user.setEmail(req.getEmail().trim().toLowerCase());
-        user.setPhone(req.getPhone());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
-        user.setRole(roleStr.equals("worker") ? User.Role.WORKER : User.Role.PROVIDER);
+        user.setPhone(req.getPhone());
+        user.setRole(role.equals("needer") ? User.Role.NEEDER : User.Role.PROVIDER);
         user.setAvailability(User.Availability.AVAILABLE);
         user.setRating(0.0);
         user.setJobsCompleted(0);
+        user.setIsActive(true);
 
-        return userRepository.save(user);
+        return userRepo.save(user);
     }
 
-    // ── Authentication ────────────────────────────────────────────────────────
+    // ── Authenticate ──────────────────────────────────────────
 
-    /**
-     * Validate email + password.
-     * Returns the User if credentials are correct.
-     * Throws RuntimeException with clear message on failure.
-     */
     public User authenticate(String email, String rawPassword) {
-        User user = userRepository.findByEmail(email.trim().toLowerCase())
+        User user = userRepo.findByEmail(email.trim().toLowerCase())
                 .orElseThrow(() -> new RuntimeException("No account found with that email."));
 
-        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+        if (!passwordEncoder.matches(rawPassword, user.getPassword()))
             throw new RuntimeException("Incorrect password. Please try again.");
-        }
 
         return user;
     }
 
-    // ── Profile ───────────────────────────────────────────────────────────────
+    // ── Lookups ───────────────────────────────────────────────
 
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return userRepo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found."));
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id)
+        return userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found."));
     }
 
+    // ── Update profile ────────────────────────────────────────
+
     public User updateProfile(String email, Dto.ProfileUpdateRequest req) {
         User user = findByEmail(email);
-
-        if (req.getName()     != null && !req.getName().isBlank())     user.setName(req.getName().trim());
-        if (req.getPhone()    != null)                                 user.setPhone(req.getPhone());
-        if (req.getLocation() != null)                                 user.setLocation(req.getLocation());
-        if (req.getBio()      != null)                                 user.setBio(req.getBio());
-        if (req.getCategory() != null && user.getRole() == User.Role.WORKER) user.setCategory(req.getCategory());
-
-        return userRepository.save(user);
+        if (req.getName()     != null && !req.getName().isBlank()) user.setName(req.getName().trim());
+        if (req.getPhone()    != null) user.setPhone(req.getPhone());
+        if (req.getLocation() != null) user.setLocation(req.getLocation());
+        if (req.getBio()      != null) user.setBio(req.getBio());
+        if (req.getCategory() != null && user.getRole() == User.Role.PROVIDER) user.setCategory(req.getCategory());
+        return userRepo.save(user);
     }
 
-    // ── Workers list (for "Find Workers") ─────────────────────────────────────
+    // ── Browse providers ──────────────────────────────────────
 
-    public List<User> getAllWorkers() {
-        return userRepository.findByRole(User.Role.WORKER);
+    public List<User> getAllProviders() {
+        return userRepo.findByRole(User.Role.PROVIDER);
     }
 
-    public List<User> searchWorkers(String category, String location) {
-        if (category != null && !category.isBlank() && location != null && !location.isBlank()) {
-            return userRepository.findWorkersByCategoryAndLocation(category, location);
-        } else if (location != null && !location.isBlank()) {
-            return userRepository.findWorkersByLocation(location);
-        } else if (category != null && !category.isBlank()) {
-            return userRepository.findByRoleAndCategoryAndAvailability(
-                    User.Role.WORKER, category, User.Availability.AVAILABLE);
-        }
-        return getAllWorkers();
+    public List<User> searchProviders(String category, String location) {
+        String cat = (category != null && !category.isBlank()) ? category : null;
+        String loc = (location != null && !location.isBlank()) ? location : null;
+        if (cat == null && loc == null) return getAllProviders();
+        return userRepo.searchProviders(cat, loc);
     }
 }

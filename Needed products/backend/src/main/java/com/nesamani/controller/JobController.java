@@ -1,4 +1,4 @@
-package com.nesamani.controller;
+package backend.src.main.java.com.nesamani.controllercom.nesamani.controller;
 
 import com.nesamani.dto.Dto;
 import com.nesamani.model.Application;

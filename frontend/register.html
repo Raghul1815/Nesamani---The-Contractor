@@ -46,7 +46,7 @@
 
         <!-- Role toggle -->
         <div class="role-toggle" id="roleToggle">
-          <button class="role-btn active" data-role="worker" type="button">
+          <button class="role-btn active" data-role="needer" type="button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
@@ -61,7 +61,7 @@
           </button>
           <div class="role-slider"></div>
         </div>
-        <input type="hidden" id="role" value="worker">
+        <input type="hidden" id="role" value="needer">
 
         <form id="registerForm" class="auth-form" novalidate>
 
@@ -158,6 +158,8 @@
     <span id="toastMsg">Registered successfully!</span>
   </div>
 
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/register.js"></script>
 </body>
 </html>

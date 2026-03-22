@@ -1,17 +1,11 @@
 /* ═══════════════════════════════════════════
    NESAMANI — auth.js
-   Single source of truth for:
-     • Session storage / retrieval
-     • Auth guard (requireAuth)
-     • Role-based redirect
-     • Authenticated fetch (apiFetch)
-     • Logout
-   Load this BEFORE any dashboard JS file.
+   Roles: "needer" | "provider"
+   Load BEFORE api.js and any dashboard JS.
    ═══════════════════════════════════════════ */
 
 const API_BASE = 'http://localhost:8080';
 
-/* ── Storage keys (one place, never duplicated) ── */
 const SESSION_KEYS = {
   token:  'nesaToken',
   role:   'nesaRole',
@@ -21,13 +15,8 @@ const SESSION_KEYS = {
   phone:  'nesaPhone'
 };
 
-/* ─────────────────────────────────────────────────
-   saveSession(data)
-   Call after successful login with the API response.
-   Expected shape:
-     { token, role, name, userId (or id), email }
-   role must be exactly  "worker"  or  "provider"
-───────────────────────────────────────────────── */
+/* Save session after login
+   data = { token, role:"needer"|"provider", name, userId, email, phone } */
 function saveSession(data) {
   try {
     localStorage.setItem(SESSION_KEYS.token,  data.token            || '');
@@ -36,78 +25,47 @@ function saveSession(data) {
     localStorage.setItem(SESSION_KEYS.userId, data.userId || data.id || '');
     localStorage.setItem(SESSION_KEYS.email,  data.email            || '');
     localStorage.setItem(SESSION_KEYS.phone,  data.phone            || '');
-  } catch (e) {
-    console.error('[auth] saveSession failed:', e);
-  }
+  } catch (e) { console.error('[auth] saveSession failed:', e); }
 }
 
-/* ─────────────────────────────────────────────────
-   getSession(key)
-   key is one of: 'token' | 'role' | 'name' |
-                  'userId' | 'email' | 'phone'
-   Returns empty string when missing (never null).
-───────────────────────────────────────────────── */
+/* Read a session value. key = 'token'|'role'|'name'|'userId'|'email'|'phone' */
 function getSession(key) {
-  try {
-    return localStorage.getItem(SESSION_KEYS[key]) || '';
-  } catch (e) {
-    return '';
-  }
+  try { return localStorage.getItem(SESSION_KEYS[key]) || ''; }
+  catch (e) { return ''; }
 }
 
-/* ─────────────────────────────────────────────────
-   clearSession()  — wipe everything stored by Nesamani
-───────────────────────────────────────────────── */
+/* Clear all session data */
 function clearSession() {
-  try {
-    Object.values(SESSION_KEYS).forEach(k => localStorage.removeItem(k));
-  } catch (e) { /* silent */ }
+  try { Object.values(SESSION_KEYS).forEach(k => localStorage.removeItem(k)); }
+  catch (e) { /* silent */ }
 }
 
-/* ─────────────────────────────────────────────────
-   redirectByRole(role)
-   "worker"   → worker-dashboard.html
-   "provider" → customer-dashboard.html
-   anything else → login.html
-───────────────────────────────────────────────── */
+/* Redirect based on role
+   "needer"   → needer-dashboard.html
+   "provider" → provider-dashboard.html
+   else       → login.html                */
 function redirectByRole(role) {
-  if (role === 'worker') {
-    window.location.href = 'worker-dashboard.html';
+  if (role === 'needer') {
+    window.location.href = 'needer-dashboard.html';
   } else if (role === 'provider') {
-    window.location.href = 'customer-dashboard.html';
+    window.location.href = 'provider-dashboard.html';
   } else {
     window.location.href = 'login.html';
   }
 }
 
-/* ─────────────────────────────────────────────────
-   requireAuth(expectedRole)
-   Call at the top of each dashboard page.
-     expectedRole: 'worker' | 'provider'
-   • No token → sends to login.html
-   • Wrong role → sends to correct dashboard
-   • Returns true only when token + role match.
-───────────────────────────────────────────────── */
+/* Auth guard — call at top of each dashboard.
+   expectedRole: 'needer' | 'provider'
+   Returns true only when token + role match.  */
 function requireAuth(expectedRole) {
   const token = getSession('token');
   const role  = getSession('role');
-
-  if (!token) {
-    window.location.href = 'login.html';
-    return false;
-  }
-  if (expectedRole && role !== expectedRole) {
-    redirectByRole(role);
-    return false;
-  }
+  if (!token) { window.location.href = 'login.html'; return false; }
+  if (expectedRole && role !== expectedRole) { redirectByRole(role); return false; }
   return true;
 }
 
-/* ─────────────────────────────────────────────────
-   authHeaders()
-   Returns headers object with Bearer token + JSON type.
-   Pass to fetch() as the `headers` option.
-───────────────────────────────────────────────── */
+/* Build auth headers for fetch */
 function authHeaders() {
   return {
     'Content-Type': 'application/json',
@@ -115,17 +73,8 @@ function authHeaders() {
   };
 }
 
-/* ─────────────────────────────────────────────────
-   apiFetch(path, options)
-   Authenticated wrapper around fetch.
-   Automatically adds auth headers.
-   On 401 → clears session and redirects to login.
-   Usage:
-     const res = await apiFetch('/api/worker/jobs');
-     const res = await apiFetch('/api/customer/jobs', {
-       method: 'POST', body: JSON.stringify(payload)
-     });
-───────────────────────────────────────────────── */
+/* Authenticated fetch wrapper
+   On 401 → clears session, sends to login */
 async function apiFetch(path, options = {}) {
   const headers = Object.assign({}, authHeaders(), options.headers || {});
   try {
@@ -133,21 +82,16 @@ async function apiFetch(path, options = {}) {
     if (res.status === 401) {
       clearSession();
       window.location.href = 'login.html';
-      throw new Error('Session expired. Please log in again.');
+      throw new Error('Session expired.');
     }
     return res;
   } catch (err) {
-    if (err.message && err.message.includes('Session expired')) throw err;
-    /* Network error — caller handles gracefully */
+    if (err.message === 'Session expired.') throw err;
     throw err;
   }
 }
 
-/* ─────────────────────────────────────────────────
-   logout()
-   Clears session and redirects to login page.
-   Call from any dashboard's logout button.
-───────────────────────────────────────────────── */
+/* Logout and go to login */
 function logout() {
   clearSession();
   window.location.href = 'login.html';

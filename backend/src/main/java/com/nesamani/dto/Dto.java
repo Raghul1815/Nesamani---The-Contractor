@@ -1,163 +1,115 @@
 package com.nesamani.dto;
 
 /**
- * All DTO (Data Transfer Object) classes used by controllers.
- * Kept in one file for simplicity — split into separate files if project grows.
+ * All DTOs used by controllers.
+ * Role in all responses is lowercase: "needer" or "provider"
  */
 public class Dto {
 
-    // ── Auth DTOs ────────────────────────────────────────────────────────────
+    // ── AUTH ──────────────────────────────────────────────────
 
-    /** POST /api/auth/register */
     public static class RegisterRequest {
-        private String name;
-        private String email;
-        private String phone;
-        private String password;
-        private String role;    // "worker" or "provider" from frontend
-
-        public String getName()     { return name; }
-        public void setName(String name) { this.name = name; }
-
-        public String getEmail()    { return email; }
-        public void setEmail(String email) { this.email = email; }
-
-        public String getPhone()    { return phone; }
-        public void setPhone(String phone) { this.phone = phone; }
-
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
-
-        public String getRole()     { return role; }
-        public void setRole(String role) { this.role = role; }
+        private String name, email, phone, password;
+        private String role;   // "needer" or "provider"
+        public String getName()     { return name; }     public void setName(String v)     { name = v; }
+        public String getEmail()    { return email; }    public void setEmail(String v)    { email = v; }
+        public String getPhone()    { return phone; }    public void setPhone(String v)    { phone = v; }
+        public String getPassword() { return password; } public void setPassword(String v) { password = v; }
+        public String getRole()     { return role; }     public void setRole(String v)     { role = v; }
     }
 
-    /** POST /api/auth/login */
     public static class LoginRequest {
-        private String email;
-        private String password;
-
-        public String getEmail()    { return email; }
-        public void setEmail(String email) { this.email = email; }
-
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
+        private String email, password;
+        public String getEmail()    { return email; }    public void setEmail(String v)    { email = v; }
+        public String getPassword() { return password; } public void setPassword(String v) { password = v; }
     }
 
-    /**
-     * Login/Register response.
-     * Frontend (auth.js) reads: token, role, name, userId, email
-     * role MUST be lowercase: "worker" or "provider"
-     */
+    /** Login response — role MUST be lowercase "needer" or "provider" for frontend auth.js */
     public static class AuthResponse {
-        private String token;
-        private String role;
-        private String name;
-        private Long   userId;
-        private String email;
-        private String phone;
-
+        private final String token, role, name, email, phone;
+        private final Long   userId;
         public AuthResponse(String token, String role, String name, Long userId, String email, String phone) {
-            this.token  = token;
-            this.role   = role;
-            this.name   = name;
-            this.userId = userId;
-            this.email  = email;
-            this.phone  = phone;
+            this.token=token; this.role=role; this.name=name; this.userId=userId; this.email=email; this.phone=phone;
         }
-
         public String getToken()   { return token; }
-        public String getRole()    { return role; }
+        public String getRole()    { return role; }   // "needer" or "provider"
         public String getName()    { return name; }
         public Long   getUserId()  { return userId; }
         public String getEmail()   { return email; }
         public String getPhone()   { return phone; }
     }
 
-    // ── Job DTOs ─────────────────────────────────────────────────────────────
+    // ── JOB ───────────────────────────────────────────────────
 
-    /** POST /api/customer/jobs — create a job */
     public static class JobRequest {
-        private String title;
-        private String category;
-        private String location;
-        private String budget;
-        private String duration;
-        private String description;
-        private String date;        // ISO date string: "2026-03-20"
-
-        public String getTitle()       { return title; }
-        public void setTitle(String t) { this.title = t; }
-
-        public String getCategory()        { return category; }
-        public void setCategory(String c)  { this.category = c; }
-
-        public String getLocation()        { return location; }
-        public void setLocation(String l)  { this.location = l; }
-
-        public String getBudget()          { return budget; }
-        public void setBudget(String b)    { this.budget = b; }
-
-        public String getDuration()        { return duration; }
-        public void setDuration(String d)  { this.duration = d; }
-
-        public String getDescription()     { return description; }
-        public void setDescription(String d) { this.description = d; }
-
-        public String getDate()            { return date; }
-        public void setDate(String date)   { this.date = date; }
+        private String title, category, location, budget, duration, description, date;
+        public String getTitle()       { return title; }       public void setTitle(String v)       { title=v; }
+        public String getCategory()    { return category; }    public void setCategory(String v)    { category=v; }
+        public String getLocation()    { return location; }    public void setLocation(String v)    { location=v; }
+        public String getBudget()      { return budget; }      public void setBudget(String v)      { budget=v; }
+        public String getDuration()    { return duration; }    public void setDuration(String v)    { duration=v; }
+        public String getDescription() { return description; } public void setDescription(String v) { description=v; }
+        public String getDate()        { return date; }        public void setDate(String v)        { date=v; }
     }
 
-    /** POST /api/worker/jobs/{id}/apply — apply to a job */
-    public static class ApplyRequest {
-        private String coverNote;
-        private String quotedPrice;
+    // ── SERVICE ───────────────────────────────────────────────
 
-        public String getCoverNote()           { return coverNote; }
-        public void setCoverNote(String n)     { this.coverNote = n; }
-
-        public String getQuotedPrice()         { return quotedPrice; }
-        public void setQuotedPrice(String p)   { this.quotedPrice = p; }
+    public static class ServiceRequest {
+        private String title, category, price, priceType, location, description;
+        private Boolean isAvailable;
+        public String  getTitle()       { return title; }       public void setTitle(String v)       { title=v; }
+        public String  getCategory()    { return category; }    public void setCategory(String v)    { category=v; }
+        public String  getPrice()       { return price; }       public void setPrice(String v)       { price=v; }
+        public String  getPriceType()   { return priceType; }   public void setPriceType(String v)   { priceType=v; }
+        public String  getLocation()    { return location; }    public void setLocation(String v)    { location=v; }
+        public String  getDescription() { return description; } public void setDescription(String v) { description=v; }
+        public Boolean getIsAvailable() { return isAvailable; } public void setIsAvailable(Boolean v){ isAvailable=v; }
     }
 
-    // ── Profile DTOs ─────────────────────────────────────────────────────────
+    // ── JOB RESPONSE ─────────────────────────────────────────
 
-    /** PUT /api/worker/profile  or  PUT /api/customer/profile */
+    public static class JobResponseRequest {
+        private String message, quotedPrice;
+        public String getMessage()     { return message; }     public void setMessage(String v)     { message=v; }
+        public String getQuotedPrice() { return quotedPrice; } public void setQuotedPrice(String v) { quotedPrice=v; }
+    }
+
+    // ── BOOKING ───────────────────────────────────────────────
+
+    public static class BookingRequest {
+        private Long   providerId, serviceId, jobId;
+        private String notes, scheduledAt;
+        public Long   getProviderId()   { return providerId; }  public void setProviderId(Long v)    { providerId=v; }
+        public Long   getServiceId()    { return serviceId; }   public void setServiceId(Long v)     { serviceId=v; }
+        public Long   getJobId()        { return jobId; }       public void setJobId(Long v)         { jobId=v; }
+        public String getNotes()        { return notes; }       public void setNotes(String v)       { notes=v; }
+        public String getScheduledAt()  { return scheduledAt; } public void setScheduledAt(String v) { scheduledAt=v; }
+    }
+
+    // ── PROFILE ───────────────────────────────────────────────
+
     public static class ProfileUpdateRequest {
-        private String name;
-        private String phone;
-        private String location;
-        private String bio;
-        private String category;    // worker only
-
-        public String getName()        { return name; }
-        public void setName(String n)  { this.name = n; }
-
-        public String getPhone()       { return phone; }
-        public void setPhone(String p) { this.phone = p; }
-
-        public String getLocation()        { return location; }
-        public void setLocation(String l)  { this.location = l; }
-
-        public String getBio()         { return bio; }
-        public void setBio(String b)   { this.bio = b; }
-
-        public String getCategory()        { return category; }
-        public void setCategory(String c)  { this.category = c; }
+        private String name, phone, location, bio, category, email;
+        public String getName()     { return name; }     public void setName(String v)     { name=v; }
+        public String getPhone()    { return phone; }    public void setPhone(String v)    { phone=v; }
+        public String getLocation() { return location; } public void setLocation(String v) { location=v; }
+        public String getBio()      { return bio; }      public void setBio(String v)      { bio=v; }
+        public String getCategory() { return category; } public void setCategory(String v) { category=v; }
+        public String getEmail()    { return email; }    public void setEmail(String v)    { email=v; }
     }
 
-    // ── Generic Responses ────────────────────────────────────────────────────
+    // ── GENERIC ───────────────────────────────────────────────
 
     public static class MessageResponse {
-        private String message;
-        public MessageResponse(String message) { this.message = message; }
+        private final String message;
+        public MessageResponse(String m) { message=m; }
         public String getMessage() { return message; }
     }
 
     public static class ErrorResponse {
-        private String error;
-        private int    status;
-        public ErrorResponse(String error, int status) { this.error = error; this.status = status; }
+        private final String error;
+        private final int    status;
+        public ErrorResponse(String e, int s) { error=e; status=s; }
         public String getError()  { return error; }
         public int    getStatus() { return status; }
     }
